@@ -1,12 +1,11 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+resources:
+  repositories:
+    - repository: InfoSec_Assessments
+      type: git
+      name: openurls
 
 trigger:
 - main
-
-resources:
-- repo: self
 
 variables:
   tag: '$(Build.BuildId)'
@@ -27,3 +26,12 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/.devcontainer/Dockerfile'
         tags: |
           $(tag)
+
+    - template: templates/install-syft-grype.yml@InfoSec_Assessments
+    - template: templates/syft-grype-scan.yml@InfoSec_Assessments
+
+    - script: |
+        ls -lha $(Build.BinariesDirectory)
+      displayName: 'List dir'
+
+    - template: templates/archive-artifacts.yml@InfoSec_Assessments
