@@ -27,9 +27,6 @@ stages:
         tags: |
           $(tag)
 
-    - template: templates/install-syft-grype.yml@InfoSec_Assessments
-    - template: templates/syft-grype-scan.yml@InfoSec_Assessments
-
     - script: |
         ls -lha $(Build.BinariesDirectory)
       displayName: 'List dir'
